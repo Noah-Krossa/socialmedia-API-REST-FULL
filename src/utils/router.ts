@@ -26,7 +26,7 @@ export class Router {
     this._controllers = [...this._controllers, ...controllerList];
   }
 
-  public route() {
+  public route(): ExpressRouter {
     for (const controller of this._controllers) {
       for (const endpoint of controller.Endpoints) {
         switch (endpoint.method) {
@@ -48,5 +48,6 @@ export class Router {
         }
       }
     }
+    return this._expressRouter;
   }
 }
