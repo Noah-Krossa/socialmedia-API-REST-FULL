@@ -3,16 +3,20 @@ import { Model, Types } from "mongoose";
 export abstract class ModelService<T> {
   protected model: Model<T>;
 
-  protected async create<D>(data: D): Promise<Types.ObjectId> {
-    const { _id } = await this.model.create(data);
-    return _id;
+  public async create(data: any): Promise<Types.ObjectId> {
+    const newDocument = new this.model(data);
+    await newDocument.save();
+    return newDocument._id;
   }
 
-  protected async updateById<U>(updates: U, id: string): Promise<void> {
-    await this.model.findByIdAndUpdate(id, updates);
+  public async updateById(updates: any, id: string): Promise<any> {
+    const updatedDocument = await this.model.findByIdAndUpdate(id, updates, {
+      new: true,
+    });
+    return updatedDocument;
   }
 
-  protected async removeById(id: string) {
-    await this.model.findByIdAndRemove(id);
+  public async removeById(id: string) {
+    await this.model.remove({ _id: id });
   }
 }
