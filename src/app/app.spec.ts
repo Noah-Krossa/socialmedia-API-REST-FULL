@@ -1,7 +1,6 @@
 import { Application } from ".";
 
 let app: Application;
-
 beforeEach(() => {
   app = new Application();
 });

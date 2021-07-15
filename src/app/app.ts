@@ -3,17 +3,18 @@ import { Server } from "http";
 import Cors from "cors";
 import Helmet from "helmet";
 import Logger from "morgan";
-import { connect } from "@/utils";
+import { MongoDBManager } from "@/utils";
 
 export class Application {
   private _app: ExpressApplication = Express();
   private _server: Server | undefined = undefined;
+  private _mongodbManager: MongoDBManager = new MongoDBManager();
 
   public get Server(): Server | undefined {
     return this._server;
   }
   public async setup() {
-    if (process.env.NODE_ENV === "development") require("dotenv").config();
+    if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
     /** Set default middlewares */
     this._app.use(Helmet());
@@ -23,8 +24,10 @@ export class Application {
     this._app.use(Logger("dev"));
 
     /** set server port */
-    await connect();
     this._app.set("port", process.env.PORT);
+
+    /** Connect to database only when it's not in test env */
+    if (process.env.NODE_ENV !== "test") this._mongodbManager.connect();
   }
 
   public async awake(): Promise<Server> {
