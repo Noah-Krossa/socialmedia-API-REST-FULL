@@ -12,6 +12,7 @@
     "sourceMap": true,
     "strict": true,
     "baseUrl": "src",
+      "lib": ["ESNext"],
     "paths": {
       "@/*": [
         "./*"
