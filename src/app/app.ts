@@ -4,6 +4,7 @@ import Cors from "cors";
 import Helmet from "helmet";
 import Logger from "morgan";
 import { MongoDBManager } from "@/utils";
+import IndexRouter from "@/routes";
 
 export class Application {
   private _app: ExpressApplication = Express();
@@ -28,6 +29,9 @@ export class Application {
 
     /** Connect to database only when it's not in test env */
     if (process.env.NODE_ENV !== "test") this._mongodbManager.connect();
+
+    /** Index router */
+    this._app.use("/", IndexRouter);
   }
 
   public async awake(): Promise<Server> {
