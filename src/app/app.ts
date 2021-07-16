@@ -14,6 +14,10 @@ export class Application {
   public get Server(): Server | undefined {
     return this._server;
   }
+  public get expressApp(): ExpressApplication {
+    return this._app;
+  }
+
   public async setup() {
     if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
@@ -28,8 +32,10 @@ export class Application {
     this._app.set("port", process.env.PORT);
 
     /** Connect to database only when it's not in test env */
-    if (process.env.NODE_ENV !== "test") this._mongodbManager.connect();
-
+    if (process.env.NODE_ENV !== "test") {
+      this._mongodbManager.connect();
+      console.debug("Connected to mongodb database");
+    }
     /** Index router */
     this._app.use("/", IndexRouter);
   }
