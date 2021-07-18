@@ -15,7 +15,7 @@ const testEndpoint: IEndpoint = {
   action: (req, res) => {
     res.json({ message: "App is working" });
   },
-  auth: false,
+  auth: true,
 };
 
 /** Create controller */
